@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -24,7 +25,7 @@ export default function MessagePage() {
         <h1 className="text-2xl font-bold mb-4">Mensagem Confidencial</h1>
         <p className="text-gray-800 mb-4">{messageData.message}</p>
         {messageData.imagePath && (
-          <img
+          <Image
             src={messageData.imagePath}
             alt="Imagem Confidencial"
             className="max-w-full h-auto rounded-lg shadow-lg"
