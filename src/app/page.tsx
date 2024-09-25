@@ -1,6 +1,6 @@
 "use client";
-import { useState } from "react";
 import { QRCodeCanvas } from "qrcode.react";
+import { useState } from "react";
 
 export default function Home() {
   const [message, setMessage] = useState("");
@@ -39,6 +39,21 @@ export default function Home() {
       alert("Erro de rede. Tente novamente.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const validTypes = ["image/jpeg", "image/png"];
+      if (!validTypes.includes(file.type)) {
+        alert("Apenas imagens JPG e PNG são permitidas.");
+        setImage(null); // Limpa o estado da imagem
+        return;
+      }
+      setImage(file);
+    } else {
+      setImage(null); // Limpa o estado se não houver arquivo
     }
   };
 
@@ -101,10 +116,7 @@ export default function Home() {
             <input
               type="file"
               accept="image/*"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                setImage(file || null);
-              }}
+              onChange={handleFileChange} // Altera aqui
               className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <button

@@ -9,6 +9,18 @@ export async function POST(req) {
     const message = formData.get("message");
     const image = formData.get("image");
     const displayTime = parseInt(formData.get("displayTime"), 10) || 10;
+    // Adicione isso no início da função POST
+    const validTypes = ["image/jpeg", "image/png"];
+
+    if (image) {
+      // Verifica se é um arquivo válido
+      if (!(image instanceof File) || !validTypes.includes(image.type)) {
+        return new Response(
+          JSON.stringify({ error: "O arquivo de imagem deve ser JPG ou PNG." }),
+          { status: 400 }
+        );
+      }
+    }
 
     if (!message && !image) {
       return new Response(
