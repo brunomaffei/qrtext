@@ -33,7 +33,7 @@ export default function Home() {
 
       const data = await res.json();
       console.log("Dados retornados:", data);
-      setQrValue(`${window.location.origin}/message/${data.id}`);
+      setQrValue(`${window.location.origin}/view/${data.id}`);
     } catch (error) {
       console.error("Erro de rede:", error);
       alert("Erro de rede. Tente novamente.");
