@@ -110,7 +110,7 @@ export default function Home() {
               onChange={(e) => setDisplayTime(parseInt(e.target.value))}
               placeholder="Tempo em segundos"
               min="1"
-              max="60" // Opcional
+              max="10" // Opcional
               className="w-full text-black p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <input
