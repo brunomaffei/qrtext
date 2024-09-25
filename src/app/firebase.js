@@ -16,4 +16,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
+console.log("Firebase inicializado");
+
 export { db, storage };

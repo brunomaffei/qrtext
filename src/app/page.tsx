@@ -19,13 +19,10 @@ export default function Home() {
     formData.append("displayTime", displayTime.toString());
 
     try {
-      const res = await fetch(
-        "https://qrtext-behh4qo5i-bruno-arantes-maffeis-projects.vercel.app/api/messages",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const res = await fetch(`${window.location.origin}/api/messages`, {
+        method: "POST",
+        body: formData,
+      });
 
       if (!res.ok) {
         const errorMessage = await res.json();
