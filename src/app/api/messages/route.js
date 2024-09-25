@@ -52,19 +52,21 @@ export async function POST(req) {
       const imageName = `${id}-${image.name}`;
       const storageRef = ref(storage, `uploads/${imageName}`);
 
+      console.log("Tentando fazer upload da imagem:", image.type);
+
       try {
         const fileBuffer = await image.arrayBuffer();
+        console.log("Tamanho do buffer da imagem:", fileBuffer.byteLength);
         await uploadBytes(storageRef, new Uint8Array(fileBuffer));
         imageUrl = await getDownloadURL(storageRef);
       } catch (uploadError) {
-        console.error("Erro ao fazer upload da imagem:", uploadError);
+        console.error("Erro ao fazer upload da imagem:", uploadError.message);
         return new Response(
           JSON.stringify({ error: "Erro ao fazer upload da imagem." }),
           { status: 500 }
         );
       }
     }
-
     // Salva a mensagem e a URL da imagem no Firestore
     const docRef = await addDoc(collection(db, "messages"), {
       message,
