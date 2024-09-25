@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { useEffect, useState } from "react";
 
-export default function ViewMessage({ params }: { params: any }) {
+export default function ViewMessage({ params }: { params: { id: string } }) {
   const [messageData, setMessageData] = useState<{
     message: string;
     imagePath?: string;
