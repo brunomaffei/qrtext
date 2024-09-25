@@ -15,7 +15,7 @@ export default function Home() {
 
     const formData = new FormData();
     formData.append("message", message);
-    formData.append("image", image || "");
+    formData.append("image", image as Blob);
     formData.append("displayTime", displayTime.toString());
 
     try {
@@ -48,12 +48,12 @@ export default function Home() {
       const validTypes = ["image/jpeg", "image/png"];
       if (!validTypes.includes(file.type)) {
         alert("Apenas imagens JPG e PNG são permitidas.");
-        setImage(null); // Limpa o estado da imagem
+        setImage(null);
         return;
       }
       setImage(file);
     } else {
-      setImage(null); // Limpa o estado se não houver arquivo
+      setImage(null);
     }
   };
 
@@ -115,8 +115,8 @@ export default function Home() {
             />
             <input
               type="file"
-              accept="image/*"
-              onChange={handleFileChange} // Altera aqui
+              accept="image/jpeg, image/png"
+              onChange={handleFileChange}
               className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <button
