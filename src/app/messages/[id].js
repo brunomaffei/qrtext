@@ -8,12 +8,10 @@ export default function MessagePage() {
   const [messageData, setMessageData] = useState(null);
 
   useEffect(() => {
-    if (id) {
-      const fetchMessage = async () => {
+    const fetchMessage = async () => {
+      if (id) {
         try {
-          const res = await fetch(
-            `${window.location.origin}/api/messages?id=${id}`
-          );
+          const res = await fetch(`/api/messages?id=${id}`);
           if (!res.ok) {
             throw new Error("Erro ao buscar a mensagem");
           }
@@ -23,18 +21,14 @@ export default function MessagePage() {
           console.error("Erro:", error);
           setMessageData({ error: error.message });
         }
-      };
+      }
+    };
 
-      fetchMessage();
-    }
+    fetchMessage(); // Chamando a função de busca
   }, [id]);
 
   if (!messageData) {
     return <p>Carregando...</p>;
-  }
-
-  if (messageData.error) {
-    return <p>{messageData.error}</p>;
   }
 
   return (
@@ -46,9 +40,9 @@ export default function MessagePage() {
           <Image
             src={messageData.imageUrl}
             alt="Imagem Confidencial"
-            width={500}
-            height={300}
             className="max-w-full h-auto rounded-lg shadow-lg"
+            width={500}
+            height={500}
           />
         )}
       </div>

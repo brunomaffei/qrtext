@@ -17,7 +17,7 @@ export async function POST(req) {
 
     // Validação do tipo de arquivo
     const validTypes = ["image/jpeg", "image/png"];
-    if (image && image instanceof File && !validTypes.includes(image.type)) {
+    if (image && !validTypes.includes(image.type)) {
       return new Response(
         JSON.stringify({ error: "O arquivo de imagem deve ser JPG ou PNG." }),
         { status: 400 }
@@ -40,7 +40,8 @@ export async function POST(req) {
       const storageRef = ref(storage, `uploads/${imageName}`);
 
       try {
-        await uploadBytes(storageRef, image);
+        const fileBuffer = await image.arrayBuffer();
+        await uploadBytes(storageRef, new Uint8Array(fileBuffer));
         imageUrl = await getDownloadURL(storageRef);
       } catch (uploadError) {
         console.error("Erro ao fazer upload da imagem:", uploadError);

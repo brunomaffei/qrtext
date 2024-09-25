@@ -19,13 +19,16 @@ export default function Home() {
     formData.append("displayTime", displayTime.toString());
 
     try {
-      const res = await fetch("/api/messages", {
-        method: "POST",
-        body: formData,
-      });
+      const res = await fetch(
+        "https://qrtext-git-main-bruno-arantes-maffeis-projects.vercel.app/api/messages",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       if (!res.ok) {
-        const errorMessage = await res.text();
+        const errorMessage = await res.json();
         console.error("Erro ao enviar mensagem:", errorMessage);
         alert(`Erro: ${errorMessage}`);
         return;
