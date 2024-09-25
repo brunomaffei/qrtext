@@ -28,6 +28,13 @@ export async function POST(req) {
     const image = formData.get("image");
     const displayTime = parseInt(formData.get("displayTime"), 10) || 10;
 
+    if (!message && !image) {
+      return new Response(
+        JSON.stringify({ error: "Nenhuma mensagem ou imagem fornecida." }),
+        { status: 400 }
+      );
+    }
+
     // Validação do tipo de arquivo
     const validTypes = ["image/jpeg", "image/png"];
     if (image && !validTypes.includes(image.type)) {

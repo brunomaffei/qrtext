@@ -13,9 +13,17 @@ export default function Home() {
     e.preventDefault();
     setLoading(true);
 
+    if (!message && !image) {
+      alert("Por favor, insira uma mensagem ou imagem.");
+      setLoading(false);
+      return;
+    }
+
     const formData = new FormData();
     formData.append("message", message);
-    formData.append("image", image as Blob);
+    if (image) {
+      formData.append("image", image, image.name);
+    }
     formData.append("displayTime", displayTime.toString());
 
     try {
@@ -32,7 +40,6 @@ export default function Home() {
       }
 
       const data = await res.json();
-      console.log("Dados retornados:", data);
       setQrValue(`${window.location.origin}/view/${data.id}`);
     } catch (error) {
       console.error("Erro de rede:", error);
