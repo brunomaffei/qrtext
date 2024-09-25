@@ -52,8 +52,6 @@ export async function POST(req) {
       const imageName = `${id}-${image.name}`;
       const storageRef = ref(storage, `uploads/${imageName}`);
 
-      console.log("Tentando fazer upload da imagem:", image.type);
-
       try {
         const fileBuffer = await image.arrayBuffer();
         console.log("Tamanho do buffer da imagem:", fileBuffer.byteLength);
