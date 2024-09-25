@@ -20,7 +20,7 @@ export default function Home() {
 
     try {
       const res = await fetch(
-        "https://qrtext-git-main-bruno-arantes-maffeis-projects.vercel.app/api/messages",
+        "https://qrtext-behh4qo5i-bruno-arantes-maffeis-projects.vercel.app/api/messages",
         {
           method: "POST",
           body: formData,
