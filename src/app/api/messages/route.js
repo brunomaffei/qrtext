@@ -1,7 +1,12 @@
-import { db, storage } from "@/app/firebase";
-import { addDoc, collection, doc, getDoc } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { addDoc, collection, deleteDoc, doc, getDoc } from "firebase/firestore";
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
+import { db, storage } from "../../firebase";
 
 export async function POST(req) {
   try {
@@ -9,17 +14,14 @@ export async function POST(req) {
     const message = formData.get("message");
     const image = formData.get("image");
     const displayTime = parseInt(formData.get("displayTime"), 10) || 10;
-    // Adicione isso no início da função POST
-    const validTypes = ["image/jpeg", "image/png"];
 
-    if (image) {
-      // Verifica se é um arquivo válido
-      if (!(image instanceof File) || !validTypes.includes(image.type)) {
-        return new Response(
-          JSON.stringify({ error: "O arquivo de imagem deve ser JPG ou PNG." }),
-          { status: 400 }
-        );
-      }
+    // Validação do tipo de arquivo
+    const validTypes = ["image/jpeg", "image/png"];
+    if (image && image instanceof File && !validTypes.includes(image.type)) {
+      return new Response(
+        JSON.stringify({ error: "O arquivo de imagem deve ser JPG ou PNG." }),
+        { status: 400 }
+      );
     }
 
     if (!message && !image) {
@@ -34,19 +36,19 @@ export async function POST(req) {
 
     // Upload da imagem para o Firebase Storage
     if (image) {
-      // Verifica se é um arquivo válido
-      if (!(image instanceof File)) {
-        return new Response(
-          JSON.stringify({ error: "O arquivo de imagem é inválido." }),
-          { status: 400 }
-        );
-      }
-
       const imageName = `${id}-${image.name}`;
       const storageRef = ref(storage, `uploads/${imageName}`);
-      await uploadBytes(storageRef, image);
 
-      imageUrl = await getDownloadURL(storageRef);
+      try {
+        await uploadBytes(storageRef, image);
+        imageUrl = await getDownloadURL(storageRef);
+      } catch (uploadError) {
+        console.error("Erro ao fazer upload da imagem:", uploadError);
+        return new Response(
+          JSON.stringify({ error: "Erro ao fazer upload da imagem." }),
+          { status: 500 }
+        );
+      }
     }
 
     // Salva a mensagem e a URL da imagem no Firestore
