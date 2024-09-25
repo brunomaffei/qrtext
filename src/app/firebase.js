@@ -16,19 +16,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-export default async function handler(req, res) {
-  try {
-    const querySnapshot = await getDocs(collection(db, "messages"));
-    const messages = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-
-    res.status(200).json({ success: true, messages });
-  } catch (error) {
-    console.error("Erro ao conectar ao Firebase:", error);
-    res.status(500).json({ success: false, error: error.message });
-  }
-}
+console.log("Firebase initialized");
 
 export { db, storage };
