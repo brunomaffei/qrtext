@@ -65,7 +65,7 @@ export default function Home() {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600">
       <header className="mb-10 text-center">
         <h1 className="text-4xl font-bold text-gray-800 mb-4">
-          Mensagens Confidenciais com QR Code
+          Mensagens Confidenciais com QR CODE
         </h1>
         <p className="text-gray-600 text-lg">
           Gere um QR Code para uma mensagem secreta com uma imagem opcional.
