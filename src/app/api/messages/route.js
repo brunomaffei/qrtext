@@ -60,10 +60,17 @@ export async function POST(req) {
       const storageRef = ref(storage, `uploads/${imageName}`);
 
       try {
+        console.log("Iniciando a conversão da imagem para arrayBuffer");
         const fileBuffer = await image.arrayBuffer();
         console.log("Tamanho do buffer da imagem:", fileBuffer.byteLength);
+
+        console.log("Iniciando o upload da imagem");
         await uploadBytes(storageRef, new Uint8Array(fileBuffer));
+        console.log("Upload da imagem concluído");
+
+        console.log("Obtendo a URL de download da imagem");
         imageUrl = await getDownloadURL(storageRef);
+        console.log("URL de download da imagem obtida:", imageUrl);
       } catch (uploadError) {
         console.error("Erro ao fazer upload da imagem:", uploadError.message);
         return new Response(
