@@ -9,6 +9,19 @@ import { v4 as uuidv4 } from "uuid";
 import { db, storage } from "../../firebase";
 
 export async function POST(req) {
+  const headers = new Headers({
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+  });
+
+  if (req.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers,
+    });
+  }
+
   try {
     const formData = await req.formData();
     const message = formData.get("message");
