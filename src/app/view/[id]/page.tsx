@@ -20,25 +20,9 @@ export default function ViewMessage({ params }: { params: { id: string } }) {
           const data = await res.json();
           setMessageData(data);
           setRemainingTime(data.displayTime);
-
-          // Iniciar contagem regressiva
-          const timer = setInterval(() => {
-            setRemainingTime((prev) => {
-              if (prev <= 1) {
-                clearInterval(timer);
-                setIsVisible(false);
-                return 0;
-              }
-              return prev - 1;
-            });
-          }, 1000);
-
-          return () => clearInterval(timer); // Limpar o intervalo quando o componente desmonta
-        } else {
-          console.error(
-            `Erro ao buscar a mensagem: ${res.status} - ${res.statusText}`
-          );
-          setMessageData(null);
+        } else if (res.status === 410) {
+          setMessageData(null); // Define que a mensagem expirou
+          setIsVisible(false);
         }
       } catch (error) {
         console.error("Erro ao buscar a mensagem:", error);
