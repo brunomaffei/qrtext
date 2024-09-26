@@ -12,9 +12,12 @@ export default function ViewMessage({ params }: { params: { id: string } }) {
   const [isVisible, setIsVisible] = useState(true);
   const router = useRouter();
 
+  console.log(params.id);
+
   useEffect(() => {
     const fetchMessage = async () => {
       const res = await fetch(`/api/messages?id=${params.id}`);
+
       if (res.ok) {
         const data = await res.json();
         setMessageData(data);
