@@ -137,6 +137,19 @@ export async function GET(req) {
       );
     }
 
+    // Deletar a mensagem do Firestore após ser visualizada
+    await deleteDoc(docRef);
+
+    // Deletar a imagem do Firebase Storage (se houver)
+    if (messageData.imageUrl) {
+      const fileName = messageData.imageUrl.split("/uploads/")[1];
+      console.log(fileName, "fileName");
+      if (fileName) {
+        const storageRef = ref(storage, `uploads/${fileName}`);
+        await deleteObject(storageRef);
+      }
+    }
+
     return new Response(JSON.stringify(messageData), { status: 200 });
   } catch (error) {
     console.error("Erro ao buscar a mensagem:", error);
