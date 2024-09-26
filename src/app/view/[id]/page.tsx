@@ -16,28 +16,34 @@ export default function ViewMessage({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     const fetchMessage = async () => {
-      const res = await fetch(`/api/messages?id=${params.id}`);
+      try {
+        const res = await fetch(`/api/messages?id=${params.id}`);
+        if (res.ok) {
+          const data = await res.json();
+          setMessageData(data);
+          setRemainingTime(data.displayTime);
 
-      if (res.ok) {
-        const data = await res.json();
-        setMessageData(data);
-        setRemainingTime(data.displayTime); // Define o tempo restante
+          // Iniciar contagem regressiva
+          const timer = setInterval(() => {
+            setRemainingTime((prev) => {
+              if (prev <= 1) {
+                clearInterval(timer);
+                setIsVisible(false);
+                return 0;
+              }
+              return prev - 1;
+            });
+          }, 1000);
 
-        // Configura o temporizador para atualizar a contagem regressiva
-        const timer = setInterval(() => {
-          setRemainingTime((prev) => {
-            if (prev <= 1) {
-              clearInterval(timer);
-              setIsVisible(false); // Esconde a mensagem quando expirar
-              return 0;
-            }
-            return prev - 1; // Diminui o tempo restante
-          });
-        }, 1000); // Atualiza a cada segundo
-
-        return () => clearInterval(timer); // Limpa o temporizador
-      } else {
-        console.error("Erro ao buscar a mensagem:", res.status);
+          return () => clearInterval(timer); // Limpar o intervalo quando o componente desmonta
+        } else {
+          console.error(
+            `Erro ao buscar a mensagem: ${res.status} - ${res.statusText}`
+          );
+          setMessageData(null);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar a mensagem:", error);
       }
     };
     fetchMessage();

@@ -131,10 +131,17 @@ export async function GET(req) {
 
       // Deletar a imagem do Firebase Storage (se houver)
       if (messageData.imageUrl) {
-        const fileName = messageData.imageUrl.split("/uploads/")[1]; // Extrai o nome do arquivo do caminho completo
-        if (fileName) {
-          const storageRef = ref(storage, `uploads/${fileName}`);
+        // Extrai apenas o caminho relativo a partir da URL completa
+        const regex = /\/o\/(.*?)\?/; // Expressão regular para capturar o caminho do arquivo
+        const match = messageData.imageUrl.match(regex);
+        const filePath = match ? decodeURIComponent(match[1]) : null;
+
+        if (filePath) {
+          const storageRef = ref(storage, filePath);
           await deleteObject(storageRef);
+          console.log(`Imagem deletada do Firebase Storage: ${filePath}`);
+        } else {
+          console.error("Não foi possível extrair o caminho da imagem da URL.");
         }
       }
 
