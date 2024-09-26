@@ -58,7 +58,7 @@ export default function ViewMessage({ params }: { params: { id: string } }) {
     }
   };
 
-  if (!messageData) return <p>Carregando...</p>;
+  if (!messageData) return router.push("/");
 
   return (
     <div className="min-h-screen text-black flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600">
