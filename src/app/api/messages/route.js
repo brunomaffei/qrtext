@@ -124,6 +124,7 @@ export async function GET(req) {
       // Deletar a imagem do Firebase Storage (se houver)
       if (messageData.imageUrl) {
         const fileName = messageData.imageUrl.split("/uploads/")[1];
+        console.log(fileName, "fileName");
         if (fileName) {
           const storageRef = ref(storage, `uploads/${fileName}`);
           await deleteObject(storageRef);
