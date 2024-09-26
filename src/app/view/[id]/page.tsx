@@ -58,7 +58,21 @@ export default function ViewMessage({ params }: { params: { id: string } }) {
     }
   };
 
-  if (!messageData) return router.push("/");
+  if (!messageData) {
+    return (
+      <div className="min-h-screen text-black flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600">
+        <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full text-center">
+          <h2 className="text-xl font-bold mb-4">Mensagem não encontrada</h2>
+          <button
+            onClick={() => router.push("/")}
+            className="mt-4 bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            Gerar Novo QR Code
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen text-black flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600">
