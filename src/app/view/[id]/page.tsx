@@ -20,6 +20,21 @@ export default function ViewMessage({ params }: { params: { id: string } }) {
           const data = await res.json();
           setMessageData(data);
           setRemainingTime(data.displayTime);
+
+          // Inicia a contagem regressiva
+          const countdown = setInterval(() => {
+            setRemainingTime((prevTime) => {
+              if (prevTime <= 1) {
+                clearInterval(countdown);
+                handleDeleteMessage(); // Chama a função de deletar mensagem quando o tempo acabar
+                return 0; // Define o tempo restante como 0
+              }
+              return prevTime - 1; // Decrementa o tempo
+            });
+          }, 1000);
+
+          // Limpa o intervalo quando o componente é desmontado
+          return () => clearInterval(countdown);
         } else if (res.status === 410) {
           setMessageData(null); // Define que a mensagem expirou
           setIsVisible(false);
@@ -28,8 +43,19 @@ export default function ViewMessage({ params }: { params: { id: string } }) {
         console.error("Erro ao buscar a mensagem:", error);
       }
     };
+
     fetchMessage();
   }, [params.id]);
+
+  const handleDeleteMessage = async () => {
+    try {
+      await fetch(`/api/messages?id=${params.id}`, { method: "DELETE" });
+      setMessageData(null);
+      setIsVisible(false);
+    } catch (error) {
+      console.error("Erro ao deletar a mensagem:", error);
+    }
+  };
 
   if (!messageData) return <p>Carregando...</p>;
 
@@ -39,9 +65,9 @@ export default function ViewMessage({ params }: { params: { id: string } }) {
         <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
           <h2 className="text-xl font-bold mb-4">Mensagem Confidencial:</h2>
           <p>{messageData.message}</p>
-          {messageData.imageUrl && ( // Alterado de imagePath para imageUrl
+          {messageData.imageUrl && (
             <img
-              src={messageData.imageUrl} // Alterado de imagePath para imageUrl
+              src={messageData.imageUrl}
               alt="Imagem da mensagem"
               className="mt-4 rounded-lg"
             />
