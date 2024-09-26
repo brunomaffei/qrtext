@@ -41,6 +41,7 @@ export default function Home() {
 
       const data = await res.json();
       setQrValue(`${window.location.origin}/view/${data.id}`);
+      setMessage("");
     } catch (error) {
       console.error("Erro de rede:", error);
       alert("Erro de rede. Tente novamente.");
@@ -88,7 +89,11 @@ export default function Home() {
             <QRCodeCanvas value={qrValue} size={256} />
           </div>
           <button
-            onClick={() => setQrValue("")}
+            onClick={() => {
+              setQrValue("");
+              setMessage("");
+              setImage(null);
+            }}
             className="mt-4 bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
           >
             Gerar nova mensagem
