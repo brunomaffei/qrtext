@@ -52,6 +52,7 @@ export default function ViewMessage({ params }: { params: { id: string } }) {
       await fetch(`/api/messages?id=${params.id}`, { method: "DELETE" });
       setMessageData(null);
       setIsVisible(false);
+      router.push("/");
     } catch (error) {
       console.error("Erro ao deletar a mensagem:", error);
     }
