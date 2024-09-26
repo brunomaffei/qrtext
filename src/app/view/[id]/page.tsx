@@ -1,12 +1,12 @@
 "use client";
 import { useRouter } from "next/navigation";
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function ViewMessage({ params }: { params: { id: string } }) {
   const [messageData, setMessageData] = useState<{
     message: string;
-    imagePath?: string;
+    imageUrl?: string;
+    displayTime: number;
   } | null>(null);
   const [remainingTime, setRemainingTime] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
@@ -48,9 +48,9 @@ export default function ViewMessage({ params }: { params: { id: string } }) {
         <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
           <h2 className="text-xl font-bold mb-4">Mensagem Confidencial:</h2>
           <p>{messageData.message}</p>
-          {messageData.imagePath && (
+          {messageData.imageUrl && ( // Alterado de imagePath para imageUrl
             <img
-              src={messageData.imagePath}
+              src={messageData.imageUrl} // Alterado de imagePath para imageUrl
               alt="Imagem da mensagem"
               className="mt-4 rounded-lg"
             />
