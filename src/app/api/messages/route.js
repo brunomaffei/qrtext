@@ -60,17 +60,9 @@ export async function POST(req) {
       const storageRef = ref(storage, `uploads/${imageName}`);
 
       try {
-        console.log("Iniciando a conversão da imagem para arrayBuffer");
         const fileBuffer = await image.arrayBuffer();
-        console.log("Tamanho do buffer da imagem:", fileBuffer.byteLength);
-
-        console.log("Iniciando o upload da imagem");
         await uploadBytes(storageRef, new Uint8Array(fileBuffer));
-        console.log("Upload da imagem concluído");
-
-        console.log("Obtendo a URL de download da imagem");
         imageUrl = await getDownloadURL(storageRef);
-        console.log("URL de download da imagem obtida:", imageUrl);
       } catch (uploadError) {
         console.error("Erro ao fazer upload da imagem:", uploadError.message);
         return new Response(
@@ -131,17 +123,10 @@ export async function GET(req) {
 
       // Deletar a imagem do Firebase Storage (se houver)
       if (messageData.imageUrl) {
-        // Extrai apenas o caminho relativo a partir da URL completa
-        const regex = /\/o\/(.*?)\?/; // Expressão regular para capturar o caminho do arquivo
-        const match = messageData.imageUrl.match(regex);
-        const filePath = match ? decodeURIComponent(match[1]) : null;
-
-        if (filePath) {
-          const storageRef = ref(storage, filePath);
+        const fileName = messageData.imageUrl.split("/uploads/")[1];
+        if (fileName) {
+          const storageRef = ref(storage, `uploads/${fileName}`);
           await deleteObject(storageRef);
-          console.log(`Imagem deletada do Firebase Storage: ${filePath}`);
-        } else {
-          console.error("Não foi possível extrair o caminho da imagem da URL.");
         }
       }
 

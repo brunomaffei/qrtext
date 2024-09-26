@@ -12,8 +12,6 @@ export default function ViewMessage({ params }: { params: { id: string } }) {
   const [isVisible, setIsVisible] = useState(true);
   const router = useRouter();
 
-  console.log(params.id);
-
   useEffect(() => {
     const fetchMessage = async () => {
       try {
